@@ -10,7 +10,7 @@ public class BJ2750 {
         }
 
         for (int i = 0; i < N - 1; i++) {
-            for (int j = 0; j < N - 1; j++) {
+            for (int j = 0; j < N - 1 - i; j++) {
                 if (A[j] > A[j + 1]) {
                     int temp = A[j];
                     A[j] = A[j + 1];
