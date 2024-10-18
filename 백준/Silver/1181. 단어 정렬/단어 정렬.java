@@ -1,0 +1,30 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuffer sb = new StringBuffer();
+        int N = Integer.parseInt(br.readLine());
+
+        TreeSet<String> set = new TreeSet<>(new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                if (o1.length() == o2.length()) {
+                    return o1.compareTo(o2);
+                }
+                return o1.length() - o2.length();
+            }
+        });
+
+        for (int i = 0; i < N; i++) {
+            set.add(br.readLine());
+        }
+
+        for (String word : set) {
+            sb.append(word).append("\n");
+        }
+
+        System.out.println(sb);
+    }
+}
