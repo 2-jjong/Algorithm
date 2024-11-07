@@ -15,21 +15,11 @@ public class Main {
 			if (number1 == 0 && number2 == 0)
 				break;
 
-			if (number1 > number2) {
-				int x = number1 / number2;
+			if (number1 % number2 == 0) {
+				sb.append("multiple").append("\n");
 
-				if (number2 * x == number1)
-					sb.append("multiple").append("\n");
-				else
-					sb.append("neither").append("\n");
-
-			} else if (number1 < number2) {
-				int x = number2 / number1;
-
-				if (number1 * x == number2)
-					sb.append("factor").append("\n");
-				else
-					sb.append("neither").append("\n");
+			} else if (number2 % number1 == 0) {
+				sb.append("factor").append("\n");
 
 			} else {
 				sb.append("neither").append("\n");
