@@ -6,17 +6,20 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 public class Solution {
+	private static int N;
+	private static List<Integer>[] graph;
+	private static boolean[] visited;
 
 	// DFS
-	public static void dfs(int node, List<Integer>[] graph, boolean[] visited) {
+	public static void dfs(int node) {
 
-		// 현재 노드 방문 처리 및 출력
+		// 현재 노드 방문 처리
 		visited[node] = true;
 
-		// 인접 노드들 방문 (재귀 호출)
+		// 인접 노드들 방문
 		for (int neighbor : graph[node]) {
 			if (!visited[neighbor]) { // 이미 방문한 노드는 탐색 안 함
-				dfs(neighbor, graph, visited);
+				dfs(neighbor);
 			}
 		}
 	}
@@ -38,15 +41,14 @@ public class Solution {
 			 * 1. 입력 파일 객체화
 			 */
 
-			int n = 100; // 노드 개수 (0번부터 99번 노드 사용)
-			List<Integer>[] graph = new ArrayList[n];
+			N = 100; // 노드 개수 (0번부터 99번 노드 사용)
+			graph = new ArrayList[N];
+			visited = new boolean[N];
 
-			// 인접 리스트 초기화
-			for (int i = 0; i < n; i++) {
+			for (int i = 0; i < N; i++) {
 				graph[i] = new ArrayList<>();
 			}
 
-			// 그래프 간선 추가
 			in.readLine();
 			StringTokenizer st = new StringTokenizer(in.readLine());
 
@@ -57,15 +59,12 @@ public class Solution {
 				graph[start].add(end);
 			}
 
-			// 방문 여부 추적 배열
-			boolean[] visited = new boolean[n];
-
 			/**
 			 * 2. 알고리즘 풀기
 			 */
 
 			// DFS 탐색 시작
-			dfs(0, graph, visited);
+			dfs(0);
 
 			/**
 			 * 3. 정답 출력
