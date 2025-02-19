@@ -1,64 +1,79 @@
-import java.util.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 
 public class Solution {
+	private static int[][] grid;
+	private static boolean[][] visited;
+	private static int[] di = { -1, 1, 0, 0 };
+	private static int[] dj = { 0, 0, -1, 1 };
+	private static boolean result;
 
-	public static void main(String[] args) throws IOException {
-//		System.setIn(new FileInputStream("C:\\Users\\user\\Downloads\\input.txt"));
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	// DFS
+	public static void dfs(int i, int j) {
+		visited[i][j] = true;
+		
+		for (int k = 0; k < di.length; k++) {
+			int ni = i + di[k];
+			int nj = j + dj[k];
+			
+			if(grid[ni][nj] == 3) {
+				result = true;
+				return;
+			}
+
+			if (!visited[ni][nj] && grid[ni][nj] == 0) {
+				dfs(ni, nj);
+			}
+		}
+	}
+
+	public static void main(String[] args) throws Exception {
+		/**
+		 * 0. 입력파일 읽어들이기
+		 */
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+
+		// 결과를 한 번에 출력하기 위한 StringBuilder
 		StringBuilder sb = new StringBuilder();
 
 		for (int testCase = 1; testCase <= 10; testCase++) {
-			int n = Integer.parseInt(br.readLine());
-			int[][] grid = new int[16][16];
-			boolean[][] visited = new boolean[16][16];
-			int startRow = 0, startCol = 0, targetRow = 0, targetCol = 0;
+			sb.append("#" + testCase + " ");
+
+			// 알고리즘 코드 작성하기
+			/**
+			 * 1. 입력 파일 객체화
+			 */
+
+			grid = new int[16][16];
+			visited = new boolean[16][16];
+			result = false;
+
+			in.readLine();
 
 			for (int i = 0; i < 16; i++) {
-				String str = br.readLine();
-				char[] c = str.toCharArray();
+				String line = in.readLine();
 
 				for (int j = 0; j < 16; j++) {
-					grid[i][j] = c[j] - '0';
-
-					if (grid[i][j] == 2) {
-						startRow = i;
-						startCol = j;
-					} else if (grid[i][j] == 3) {
-						targetRow = i;
-						targetCol = j;
-					}
+					grid[i][j] = (int) line.charAt(j) - '0';
 				}
 			}
 
-			dfs(grid, visited, startRow, startCol);
+			/**
+			 * 2. 알고리즘 풀기
+			 */
 
-			int answer = visited[targetRow][targetCol] ? 1 : 0;
-
-			sb.append("#").append(testCase).append(" ").append(answer).append("\n");
-
+			dfs(1,1);
+			
+			/**
+			 * 3. 정답 출력
+			 */
+			
+			int answer = result ? 1 : 0;
+			
+			sb.append(answer).append("\n");
 		}
 
 		System.out.println(sb);
-
 	}
-
-	public static void dfs(int[][] grid, boolean[][] visited, int row, int col) {
-		int[] dx = { 0, 0, -1, 1 };
-		int[] dy = { -1, 1, 0, 0 };
-		int nx, ny;
-
-		visited[row][col] = true;
-
-		for (int i = 0; i < 4; i++) {
-			nx = row + dx[i];
-			ny = col + dy[i];
-
-			if (nx >= 0 && ny >= 0 && nx < 16 && ny < 16) {
-				if ((grid[nx][ny] == 0 || grid[nx][ny] == 3) && !visited[nx][ny])
-					dfs(grid, visited, nx, ny);
-			}
-		}
-	}
-
 }
