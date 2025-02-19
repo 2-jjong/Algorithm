@@ -1,58 +1,86 @@
-import java.util.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.util.Deque;
+import java.util.LinkedList;
 
 public class Solution {
+	public static void main(String[] args) throws Exception {
+		/**
+		 * 0. 입력파일 읽어들이기
+		 */
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 
-	public static void main(String[] args) throws IOException {
-//		System.setIn(new FileInputStream("C:\\Users\\user\\Downloads\\input.txt"));
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		// 결과를 한 번에 출력하기 위한 StringBuilder
 		StringBuilder sb = new StringBuilder();
 
-		for (int testCase = 1; testCase <= 10; testCase++) {
-			int length = Integer.parseInt(br.readLine());
-			String str = br.readLine();
-			Stack<Character> stack = new Stack<>();
-			boolean isValid = true;
+		int T = 10;
+		for (int test_case = 1; test_case <= T; test_case++) {
+			sb.append("#" + test_case + " ");
 
-			if (length % 2 == 1) {
-				sb.append("#").append(testCase).append(" ").append(0).append("\n");
-				continue;
-			}
+			// 알고리즘 코드 작성하기
+			/**
+			 * 1. 입력 파일 객체화
+			 */
 
-			for (char c : str.toCharArray()) {
-				if (c == '(' || c == '{' || c == '[' || c == '<') {
-					stack.push(c);
+			int N = Integer.parseInt(in.readLine());
+			char[] input = in.readLine().toCharArray();
+			Deque<Character> deque = new LinkedList<>();
+			boolean result = true;
+
+			/**
+			 * 2. 알고리즘 풀기
+			 */
+
+			for (int i = 0; i < N; i++) {
+				char currentInput = input[i];
+
+				if (currentInput == ')' || currentInput == '}' || currentInput == ']' || currentInput == '>') {
+					if (deque.size() > 0) {
+						char lastChar = deque.removeLast();
+
+						switch (currentInput) {
+						case ')':
+							if (lastChar != '(')
+								result = false;
+							break;
+						case '}':
+							if (lastChar != '{')
+								result = false;
+							break;
+						case ']':
+							if (lastChar != '[')
+								result = false;
+							break;
+						case '>':
+							if (lastChar != '<')
+								result = false;
+							break;
+						}
+					} else {
+						result = false;
+						break;
+					}
 				} else {
-					if (stack.isEmpty()) {
-						isValid = false;
-						break;
-					}
-
-					char last = stack.pop();
-					if (!isPair(last, c)) {
-						isValid = false;
-						break;
-					}
+					deque.addLast(currentInput);
 				}
+
 			}
 
-			if (!stack.isEmpty()) {
-				isValid = false;
+			if (!deque.isEmpty()) {
+				result = false;
 			}
 
-			int answer = isValid ? 1 : 0;
+			/**
+			 * 3. 정답 출력
+			 */
 
-			sb.append("#").append(testCase).append(" ").append(answer).append("\n");
+			int answer = result ? 1 : 0;
+
+			sb.append(answer).append("\n");
 
 		}
 
 		System.out.println(sb);
-
 	}
-
-	private static boolean isPair(char open, char close) {
-		return (open == '(' && close == ')') || (open == '{' && close == '}') || (open == '[' && close == ']')
-				|| (open == '<' && close == '>');
-	}
-
 }
