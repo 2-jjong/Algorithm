@@ -11,17 +11,22 @@ public class Solution {
 
 	// DFS
 	public static void dfs(int i, int j) {
+		
+		// 현재 노드 방문 처리
 		visited[i][j] = true;
 		
+		// 인접 노드 방문
 		for (int k = 0; k < di.length; k++) {
 			int ni = i + di[k];
 			int nj = j + dj[k];
 			
+			// 3이면 도착점이므로 결과 true
 			if(grid[ni][nj] == 3) {
 				result = true;
 				return;
 			}
 
+			// 방문하지 않았고 갈 수 있는 길 일 때 탐색
 			if (!visited[ni][nj] && grid[ni][nj] == 0) {
 				dfs(ni, nj);
 			}
@@ -63,6 +68,7 @@ public class Solution {
 			 * 2. 알고리즘 풀기
 			 */
 
+			// 출발점 1,1부터 DFS 탐색 시작
 			dfs(1,1);
 			
 			/**
