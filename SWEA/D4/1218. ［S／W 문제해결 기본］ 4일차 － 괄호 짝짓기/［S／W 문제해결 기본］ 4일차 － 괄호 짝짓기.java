@@ -67,6 +67,7 @@ public class Solution {
 
 			}
 
+			// deque이 남아 있으면 짝 지어진 괄호가 없다는 뜻이므로 false
 			if (!deque.isEmpty()) {
 				result = false;
 			}
