@@ -1,45 +1,61 @@
-import java.util.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.util.Stack;
 
 public class Solution {
 
-	public static void main(String[] args) throws IOException {
-//		System.setIn(new FileInputStream("C:\\Users\\user\\Downloads\\input.txt"));
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	public static void main(String[] args) throws Exception {
+		/**
+		 * 0. 입력파일 읽어들이기
+		 */
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+
+		// 결과를 한 번에 출력하기 위한 StringBuilder
 		StringBuilder sb = new StringBuilder();
 
-		for (int testCase = 1; testCase <= 10; testCase++) {
-			StringTokenizer st = new StringTokenizer(br.readLine());
-			int n = Integer.parseInt(st.nextToken());
-			String str = st.nextToken();
-			List<Integer> password = new ArrayList<>();
+		int T = 10;
+		for (int test_case = 1; test_case <= T; test_case++) {
+			sb.append("#" + test_case + " ");
 
-			for (char c : str.toCharArray()) {
-				password.add(c - '0');
+			// 알고리즘 코드 작성하기
+			/**
+			 * 1. 입력 파일 객체화
+			 */
+
+			String[] split = in.readLine().split(" ");
+			int N = Integer.parseInt(split[0]);
+			char[] input = split[1].toCharArray();
+			Stack<Character> stack = new Stack<>();
+
+			/**
+			 * 2. 알고리즘 풀기
+			 */
+
+			for (int i = 0; i < input.length; i++) {
+				char currentInput = input[i];
+
+				if (!stack.isEmpty() && stack.peek() == currentInput)
+					stack.pop();
+				else
+					stack.push(currentInput);
 			}
 
-			int index = 0;
+			/**
+			 * 3. 정답 출력
+			 */
 
-			while (index < password.size() - 1) {
-				if (password.get(index) == password.get(index + 1)) {
-					password.remove(index);
-					password.remove(index);
-					index = Math.max(0, index - 1);
-				} else {
-					index++;
-				}
+			StringBuilder answer = new StringBuilder();
+			
+			while (!stack.isEmpty()) {
+				answer.append(stack.pop());
 			}
 
-			sb.append("#").append(testCase).append(" ");
-			for (int i = 0; i < password.size(); i++) {
-				sb.append(password.get(i));
-			}
-			sb.append("\n");
+			sb.append(answer.reverse()).append("\n");
 
 		}
 
 		System.out.println(sb);
-
 	}
 
 }
