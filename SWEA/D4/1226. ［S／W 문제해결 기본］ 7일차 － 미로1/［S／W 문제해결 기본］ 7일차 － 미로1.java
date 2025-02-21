@@ -1,58 +1,78 @@
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class Solution {
 	private static int[][] grid;
 	private static boolean[][] visited;
-	private static int[] di = { -1, 1, 0, 0 };
-	private static int[] dj = { 0, 0, -1, 1 };
-	private static boolean result;
+	private static int[] dx = { -1, 1, 0, 0 };
+	private static int[] dy = { 0, 0, -1, 1 };
 
-	// DFS
-	public static void dfs(int i, int j) {
-		
-		// 현재 노드 방문 처리
-		visited[i][j] = true;
-		
-		// 인접 노드 방문
-		for (int k = 0; k < di.length; k++) {
-			int ni = i + di[k];
-			int nj = j + dj[k];
-			
-			// 3이면 도착점이므로 결과 true
-			if(grid[ni][nj] == 3) {
-				result = true;
-				return;
+	public static boolean check(int x, int y) {
+		if (x < 0 || x >= 16)
+			return false;
+		if (y < 0 || y >= 16)
+			return false;
+		if (visited[x][y])
+			return false;
+		if (grid[x][y] == 1)
+			return false;
+		return true;
+	}
+
+	// BFS
+	public static int bfs(int x, int y) {
+		Queue<int[]> queue = new LinkedList<>();
+
+		visited[x][y] = true;
+
+		queue.add(new int[] { x, y });
+
+		while (!queue.isEmpty()) {
+			int[] coordinate = queue.poll();
+			int currentX = coordinate[0];
+			int currentY = coordinate[1];
+
+			if (grid[currentX][currentY] == 3) {
+				return 1;
 			}
 
-			// 방문하지 않았고 갈 수 있는 길 일 때 탐색
-			if (!visited[ni][nj] && grid[ni][nj] == 0) {
-				dfs(ni, nj);
+			for (int k = 0; k < 4; k++) {
+				int nx = currentX + dx[k];
+				int ny = currentY + dy[k];
+
+				if (check(nx, ny)) {
+					visited[nx][ny] = true;
+					queue.add(new int[] { nx, ny });
+				}
 			}
+
 		}
+
+		return 0;
 	}
 
 	public static void main(String[] args) throws Exception {
+
 		/**
 		 * 0. 입력파일 읽어들이기
 		 */
-		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 
-		// 결과를 한 번에 출력하기 위한 StringBuilder
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		StringBuilder sb = new StringBuilder();
 
-		for (int testCase = 1; testCase <= 10; testCase++) {
+		int T = 10;
+		for (int testCase = 1; testCase <= T; testCase++) {
 			sb.append("#" + testCase + " ");
 
-			// 알고리즘 코드 작성하기
 			/**
 			 * 1. 입력 파일 객체화
 			 */
 
 			grid = new int[16][16];
 			visited = new boolean[16][16];
-			result = false;
 
 			in.readLine();
 
@@ -69,14 +89,12 @@ public class Solution {
 			 */
 
 			// 출발점 1,1부터 DFS 탐색 시작
-			dfs(1,1);
-			
+			int answer = bfs(1, 1);
+
 			/**
 			 * 3. 정답 출력
 			 */
-			
-			int answer = result ? 1 : 0;
-			
+
 			sb.append(answer).append("\n");
 		}
 
