@@ -1,46 +1,66 @@
-import java.util.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class Solution {
+	public static void main(String[] args) throws Exception {
 
-	public static void main(String[] args) throws IOException {
-//		System.setIn(new FileInputStream("C:\\Users\\user\\Downloads\\input.txt"));
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		/**
+		 * 0. 입력파일 읽어들이기
+		 */
+		
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		StringBuilder sb = new StringBuilder();
 
-		for (int testCase = 1; testCase <= 10; testCase++) {
-			br.readLine();
-			int[] arr = new int[8];
+		int T = 10;
+		for (int test_case = 1; test_case <= T; test_case++) {
+			sb.append("#" + test_case + " ");
 
-			StringTokenizer st = new StringTokenizer(br.readLine());
+			/**
+			 * 1. 입력 파일 객체화
+			 */
+
+			int N = Integer.parseInt(in.readLine());
+			String[] split = in.readLine().split(" ");
+			Queue<Integer> queue = new LinkedList<>();
+
 			for (int i = 0; i < 8; i++) {
-				arr[i] = Integer.parseInt(st.nextToken());
+				queue.add(Integer.parseInt(split[i]));
 			}
 
-			int minus = 1;
+			/**
+			 * 2. 알고리즘 풀기
+			 */
 
-			while (arr[7] > 0) {
-				arr[0] -= minus;
+			int cycle = 1;
 
-				int temp = arr[0];
-				for (int i = 1; i < 8; i++) {
-					arr[i - 1] = arr[i];
+			while (true) {
+				int num = queue.poll();
+
+				num = (num - cycle) < 0 ? 0 : num - cycle;
+
+				queue.add(num);
+
+				if (num == 0) {
+					break;
 				}
-				arr[7] = Math.max(temp, 0);
 
-				minus = (minus % 5) + 1;
+				cycle = cycle % 5 + 1;
 			}
 
-			sb.append("#").append(testCase).append(" ");
-			for (int i = 0; i < 8; i++) {
-				sb.append(arr[i]).append(" ");
+			/**
+			 * 3. 정답 출력
+			 */
+			
+			while(!queue.isEmpty()) {
+				sb.append(queue.poll()).append(" ");
 			}
+
 			sb.append("\n");
-
 		}
 
 		System.out.println(sb);
-
 	}
-
 }
