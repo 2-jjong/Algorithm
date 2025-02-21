@@ -8,7 +8,6 @@ public class Main {
 	static char[][] arr;
 	static int[] dx = { 0, 1, 0, -1 };
 	static int[] dy = { 1, 0, -1, 0 };
-	static boolean[][] visited;
 	static int r, c;
 	static Set<Character> check = new HashSet<>();
 	static int cnt = 1;
@@ -22,7 +21,6 @@ public class Main {
 		c = Integer.parseInt(nums[1]);
 
 		arr = new char[r][c];
-		visited = new boolean[r][c];
 
 		for (int i = 0; i < r; i++) {
 			String line = br.readLine();
@@ -30,10 +28,10 @@ public class Main {
 				arr[i][j] = line.charAt(j);
 			}
 		}
-		
+
 		check.add(arr[0][0]);
 		dfs(0, 0);
-		
+
 		System.out.println(cnt);
 
 	}
@@ -44,7 +42,7 @@ public class Main {
 		for (int k = 0; k < 4; k++) {
 			int X = x + dx[k];
 			int Y = y + dy[k];
-			if (X >= 0 && Y >= 0 && X < r && Y < c && !visited[X][Y]) {
+			if (X >= 0 && Y >= 0 && X < r && Y < c) {
 				if (!check.contains(arr[X][Y])) {
 					check.add(arr[X][Y]);
 					dfs(X, Y);
