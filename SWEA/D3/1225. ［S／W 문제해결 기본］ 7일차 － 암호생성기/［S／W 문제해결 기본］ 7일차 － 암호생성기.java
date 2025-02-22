@@ -10,7 +10,7 @@ public class Solution {
 		/**
 		 * 0. 입력파일 읽어들이기
 		 */
-		
+
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		StringBuilder sb = new StringBuilder();
 
@@ -53,8 +53,8 @@ public class Solution {
 			/**
 			 * 3. 정답 출력
 			 */
-			
-			while(!queue.isEmpty()) {
+
+			while (!queue.isEmpty()) {
 				sb.append(queue.poll()).append(" ");
 			}
 
