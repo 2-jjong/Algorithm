@@ -11,14 +11,15 @@ public class Main {
 		Queue<int[]> queue = new LinkedList<>();
 
 		queue.add(new int[] { value, 0 });
+		visited[value] = true;
 
 		while (!queue.isEmpty()) {
 			int[] current = queue.poll();
 			int currentValue = current[0];
-			int currentDepth = current[1];
+			int currentTime = current[1];
 
 			if (currentValue == K) {
-				answer = currentDepth;
+				answer = currentTime;
 				return;
 			}
 
@@ -26,7 +27,7 @@ public class Main {
 
 			for (int nextValue : nextValues) {
 				if (nextValue >= 0 && nextValue <= 100000 && !visited[nextValue]) {
-					queue.add(new int[] { nextValue, currentDepth + 1 });
+					queue.add(new int[] { nextValue, currentTime + 1 });
 					visited[nextValue] = true;
 				}
 			}
