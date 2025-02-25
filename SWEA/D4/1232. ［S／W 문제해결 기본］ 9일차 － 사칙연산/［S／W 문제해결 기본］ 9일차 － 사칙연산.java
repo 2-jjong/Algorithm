@@ -1,77 +1,97 @@
-import java.util.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Solution {
-	static class Node {
-		String value;
-		int left;
-		int right;
+	private static int N;
+	private static Node[] tree;
 
-		public Node(String value, int left, int right) {
-			this.value = value;
-			this.left = left;
-			this.right = right;
+	public static int postOrder(Node node) {
+		if (node == null) {
+			return -1;
 		}
 
+		int left = postOrder(node.left);
+		int right = postOrder(node.right);
+
+		String value = node.value;
+		
+		if (value.equals("+"))
+			return left + right;
+		else if (value.equals("-"))
+			return left - right;
+		else if (value.equals("*"))
+			return left * right;
+		else if (value.equals("/"))
+			return left / right;
+		else
+			return Integer.parseInt(value);
 	}
 
-	static Node[] tree;
-	static StringBuilder sb;
+	public static void main(String[] args) throws Exception {
 
-	public static void main(String[] args) throws IOException {
-//		System.setIn(new FileInputStream("C:\\Users\\user\\Downloads\\input.txt"));
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		sb = new StringBuilder();
+		/**
+		 * 0. 입력파일 읽어들이기
+		 */
 
-		for (int testCase = 1; testCase <= 10; testCase++) {
-			int n = Integer.parseInt(br.readLine());
-			tree = new Node[n + 1];
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		StringBuilder sb = new StringBuilder();
 
-			for (int i = 1; i <= n; i++) {
-				StringTokenizer st = new StringTokenizer(br.readLine());
-				int vertex = Integer.parseInt(st.nextToken());
-				String value = st.nextToken();
-				int left = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : -1;
-				int right = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : -1;
+		int T = 10;
+		for (int test_case = 1; test_case <= T; test_case++) {
+			sb.append("#" + test_case + " ");
 
-				tree[i] = new Node(value, left, right);
+			/**
+			 * 1. 입력 파일 객체화
+			 */
+
+			N = Integer.parseInt(in.readLine());
+			tree = new Node[N + 1];
+
+			for (int i = 1; i < N + 1; i++) {
+				tree[i] = new Node();
 			}
 
-			int answer = (int) postOrder(1);
+			for (int i = 0; i < N; i++) {
+				StringTokenizer st = new StringTokenizer(in.readLine());
 
-			sb.append("#").append(testCase).append(" ").append(answer).append("\n");
+				int index = Integer.parseInt(st.nextToken());
+
+				tree[index].value = st.nextToken();
+
+				if (st.hasMoreTokens()) {
+					int leftIndex = Integer.parseInt(st.nextToken());
+					tree[index].left = tree[leftIndex];
+				}
+
+				if (st.hasMoreTokens()) {
+					int rightIndex = Integer.parseInt(st.nextToken());
+					tree[index].right = tree[rightIndex];
+				}
+			}
+
+			/**
+			 * 2. 알고리즘 풀기
+			 */
+
+			int answer = postOrder(tree[1]);
+
+			/**
+			 * 3. 정답 출력
+			 */
+
+			sb.append(answer).append("\n");
 
 		}
 
 		System.out.println(sb);
-
 	}
 
-	public static double postOrder(int vertex) {
-		if (vertex == -1)
-			return 0;
+}
 
-		Node node = tree[vertex];
-
-		if (node.left == -1 && node.right == -1) {
-			return Double.parseDouble(node.value);
-		}
-
-		double left = postOrder(node.left);
-		double right = postOrder(node.right);
-
-		switch (node.value) {
-		case "+":
-			return left + right;
-		case "-":
-			return left - right;
-		case "*":
-			return left * right;
-		case "/":
-			return left / right;
-		default:
-			return 0;
-		}
-	}
-
+class Node {
+	String value;
+	Node left;
+	Node right;
 }
