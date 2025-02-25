@@ -1,59 +1,63 @@
-import java.util.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Solution {
-	static class Node {
-		char value;
-		int lfet;
-		int right;
+	private static int N;
+	private static char[] tree;
+	private static StringBuilder sb;
 
-		public Node(char value, int left, int right) {
-			this.value = value;
-			this.lfet = left;
-			this.right = right;
-		}
+	public static void inOrder(int index) {
+		if (index > N)
+			return;
 
+		inOrder(index * 2);
+		sb.append(tree[index]);
+		inOrder(index * 2 + 1);
 	}
 
-	static Node[] tree;
-	static StringBuilder sb;
+	public static void main(String[] args) throws Exception {
 
-	public static void main(String[] args) throws IOException {
-//		System.setIn(new FileInputStream("C:\\Users\\user\\Downloads\\input.txt"));
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		/**
+		 * 0. 입력파일 읽어들이기
+		 */
+
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		sb = new StringBuilder();
 
-		for (int testCase = 1; testCase <= 10; testCase++) {
-			int n = Integer.parseInt(br.readLine());
-			tree = new Node[n + 1];
+		int T = 10;
+		for (int test_case = 1; test_case <= T; test_case++) {
+			sb.append("#" + test_case + " ");
 
-			for (int i = 1; i <= n; i++) {
-				StringTokenizer st = new StringTokenizer(br.readLine());
-				int vertex = Integer.parseInt(st.nextToken());
-				char value = st.nextToken().charAt(0);
-				int left = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : -1;
-				int right = st.hasMoreTokens() ? Integer.parseInt(st.nextToken()) : -1;
+			/**
+			 * 1. 입력 파일 객체화
+			 */
 
-				tree[i] = new Node(value, left, right);
+			N = Integer.parseInt(in.readLine());
+			tree = new char[N + 1];
+
+			for (int i = 0; i < N; i++) {
+				StringTokenizer st = new StringTokenizer(in.readLine());
+				int index = Integer.parseInt(st.nextToken());
+
+				tree[index] = st.nextToken().charAt(0);
 			}
 
-			sb.append("#").append(testCase).append(" ");
+			/**
+			 * 2. 알고리즘 풀기
+			 */
+
 			inOrder(1);
+
+			/**
+			 * 3. 정답 출력
+			 */
+
 			sb.append("\n");
 
 		}
 
 		System.out.println(sb);
-
 	}
-
-	public static void inOrder(int vertex) {
-		if (vertex == -1)
-			return;
-
-		inOrder(tree[vertex].lfet);
-		sb.append(tree[vertex].value);
-		inOrder(tree[vertex].right);
-	}
-
 }
