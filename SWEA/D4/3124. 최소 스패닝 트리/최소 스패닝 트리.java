@@ -1,63 +1,29 @@
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 public class Solution {
-	private static class Edge implements Comparable<Edge> {
-		public int from;
-		public int to;
-		public int weight;
+	private static class Vertex implements Comparable<Vertex> {
+		public int no;
+		public Vertex link;
+		public long weight;
 
-		public Edge(int start, int end, int weight) {
-			this.from = start;
-			this.to = end;
+		public Vertex(int vertex, Vertex next, long weight) {
+			this.no = vertex;
+			this.link = next;
 			this.weight = weight;
 		}
 
 		@Override
-		public String toString() {
-			return "Edge [from=" + from + ", to=" + to + ", weight=" + weight + "]";
-		}
-
-		@Override
-		public int compareTo(Edge o) {
-			return this.weight - o.weight;
+		public int compareTo(Vertex o) {
+			return Long.compare(this.weight, o.weight);
 		}
 	}
 
-	private static int V;
-	private static int[] parents;
-	private static Edge[] edgeList;
-
-	public static void makeSet() {
-		parents = new int[V + 1];
-
-		for (int i = 1; i < V + 1; i++) {
-			parents[i] = i;
-		}
-	}
-
-	public static int findSet(int a) {
-		if (parents[a] == a) {
-			return a;
-		}
-
-		return parents[a] = findSet(parents[a]);
-	}
-
-	public static boolean union(int a, int b) {
-		int aRoot = findSet(a);
-		int bRoot = findSet(b);
-
-		if (aRoot == bRoot) {
-			return false;
-		}
-
-		parents[bRoot] = aRoot;
-		return true;
-	}
+	private static Vertex[] graph;
+	private static boolean[] visited;
 
 	public static void main(String[] args) throws Exception {
 
@@ -77,49 +43,63 @@ public class Solution {
 			 */
 
 			StringTokenizer st = new StringTokenizer(br.readLine());
-			V = Integer.parseInt(st.nextToken());
+			int V = Integer.parseInt(st.nextToken());
 			int E = Integer.parseInt(st.nextToken());
 
-			edgeList = new Edge[E];
+			graph = new Vertex[V + 1];
+			visited = new boolean[V + 1];
 
 			for (int i = 0; i < E; i++) {
-				st = new StringTokenizer(br.readLine().trim());
+				st = new StringTokenizer(br.readLine());
+				int A = Integer.parseInt(st.nextToken());
+				int B = Integer.parseInt(st.nextToken());
+				long C = Long.parseLong(st.nextToken());
 
-				int from = Integer.parseInt(st.nextToken());
-				int to = Integer.parseInt(st.nextToken());
-				int weight = Integer.parseInt(st.nextToken());
-
-				edgeList[i] = new Edge(from, to, weight);
+				graph[A] = new Vertex(B, graph[A], C);
+				graph[B] = new Vertex(A, graph[B], C);
 			}
-
-			Arrays.sort(edgeList);
-
-			makeSet();
 
 			/**
 			 * 2. 알고리즘 풀기
 			 */
 
-			long result = 0;
-			int count = 0;
-			for (Edge edge : edgeList) {
-				if (union(edge.from, edge.to)) {
-					result += edge.weight;
-
-					if (++count == V - 1) {
-						break;
-					}
-				}
-			}
+			long result = prim(V);
 
 			/**
 			 * 3. 정답 출력
 			 */
 
 			sb.append(result).append("\n");
+		}
+		System.out.println(sb);
+	}
 
+	static long prim(int V) {
+		PriorityQueue<Vertex> pq = new PriorityQueue<>();
+		pq.offer(new Vertex(1, null, 0));
+		long totalWeight = 0;
+		int count = 0;
+
+		while (!pq.isEmpty()) {
+			Vertex current = pq.poll();
+
+			if (visited[current.no])
+				continue;
+
+			visited[current.no] = true;
+			totalWeight += current.weight;
+			count++;
+
+			if (count == V)
+				break;
+
+			for (Vertex next = graph[current.no]; next != null; next = next.link) {
+				if (!visited[next.no]) {
+					pq.add(new Vertex(next.no, null, next.weight));
+				}
+			}
 		}
 
-		System.out.println(sb);
+		return totalWeight;
 	}
 }
