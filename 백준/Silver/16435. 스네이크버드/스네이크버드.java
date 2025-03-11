@@ -1,26 +1,36 @@
-import java.util.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.StringTokenizer;
 
 public class Main {
+	private static int N, L;
+	private static int[] fruits;
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        int N = Integer.parseInt(st.nextToken());
-        int L = Integer.parseInt(st.nextToken());
-        int[] height = new int[N];
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < N; i++) {
-            height[i] = Integer.parseInt(st.nextToken());
-        }
-        Arrays.sort(height);
+		StringTokenizer st = new StringTokenizer(br.readLine());
 
-        for (int i = 0; i < N; i++) {
-            if (L >= height[i])
-                L++;
-        }
+		N = Integer.parseInt(st.nextToken());
+		L = Integer.parseInt(st.nextToken());
+		fruits = new int[N];
 
-        System.out.println(L);
-    }
+		st = new StringTokenizer(br.readLine());
+
+		for (int i = 0; i < N; i++) {
+			fruits[i] = Integer.parseInt(st.nextToken());
+		}
+
+		Arrays.sort(fruits);
+
+		for (int i = 0; i < N; i++) {
+			if (L >= fruits[i])
+				L++;
+			else
+				break;
+		}
+
+		System.out.println(L);
+	}
 }
