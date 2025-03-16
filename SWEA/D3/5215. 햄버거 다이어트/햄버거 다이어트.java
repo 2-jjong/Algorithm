@@ -6,7 +6,6 @@ public class Solution {
 	private static int N, L;
 	private static int[] tastes;
 	private static int[] calories;
-	private static boolean[] selected;
 	private static int answer;
 
 	public static void subSet(int index, int calorie, int taste) {
@@ -17,10 +16,8 @@ public class Solution {
 			return;
 		}
 
-		selected[index] = true;
 		subSet(index + 1, calorie + calories[index], taste + tastes[index]);
 
-		selected[index] = false;
 		subSet(index + 1, calorie, taste);
 	}
 
@@ -37,7 +34,6 @@ public class Solution {
 			L = Integer.parseInt(st.nextToken());
 			tastes = new int[N];
 			calories = new int[N];
-			selected = new boolean[N];
 
 			for (int i = 0; i < N; i++) {
 				st = new StringTokenizer(br.readLine());
