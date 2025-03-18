@@ -23,11 +23,7 @@ public class Main {
 		dp[0][1][0] = 1;
 
 		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < N; j++) {
-				// 초기 파이프 건너뛰기
-				if (i == 0 && j == 1)
-					continue;
-
+			for (int j = 2; j < N; j++) {
 				// 벽이면 건너뛰기
 				if (map[i][j] == 1)
 					continue;
